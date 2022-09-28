@@ -1,6 +1,6 @@
 package qwixx.arena;
 
-public class Dice {
+class Dice {
     int value;
 
     public void rool() {
