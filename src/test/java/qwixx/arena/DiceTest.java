@@ -8,7 +8,7 @@ public class DiceTest {
 
     @Test
     public void ensure_rool_return_1_6() {
-        Dice dice = new Dice();
+        Dice dice = new GreenDice();
         dice.rool();
         log.info("Dice : {}", dice.value);
         assert(dice.value >= 1);

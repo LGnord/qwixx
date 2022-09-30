@@ -15,7 +15,6 @@ public class Sheet {
         lines.put(Color.RED, new IncreaseLine());
         lines.put(Color.BLUE, new DecreaseLine());
         lines.put(Color.GREEN, new DecreaseLine());
-
     }
 
     public void accept(Dices dices) throws IllegalMoveException {

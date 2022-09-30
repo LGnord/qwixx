@@ -16,4 +16,12 @@ class IncreaseLine extends Line {
             throw new IllegalMoveException("Need more than 5 values to close a line. Current is" + nbValues);
         }
     }
+
+    @Override
+    void close(int value) throws IllegalMoveException {
+        if (value == 12) {
+            isClose = true;
+            nbValues++;
+        }
+    }
 }
