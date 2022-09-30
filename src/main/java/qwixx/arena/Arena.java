@@ -17,12 +17,15 @@ public class Arena {
     List<Player> players = new ArrayList<>();
 
     Set<Color> closeLines = new HashSet<>();
+    boolean isFourthMalus = false;
 
     void round() {
         dices.rool();
         log.info("dices : {}", dices);
         for (Player player : players) {
-            player.show(dices);
+            if (continueToPlay()) {
+                player.show(dices);
+            }
         }
         if (closeLines.size() >+ 2) {
             for (Player player : players) {
@@ -32,6 +35,7 @@ public class Arena {
     }
 
     public void closeLine(Color color) {
+        log.debug("Close line {}. Lines already closed", color, closeLines);
         closeLines.add(color);
     }
 
@@ -41,8 +45,19 @@ public class Arena {
     }
 
     public void playQwixx() {
-        while (closeLines.size() < 2 ) {
+        while (continueToPlay()) {
             round();
         }
+        for (Player player : players) {
+            log.info("Final score {}",  player.score());
+        }
+    }
+
+    boolean continueToPlay() {
+        return !isFourthMalus && closeLines.size() < 2 ;
+    }
+    public void fourthMalus() {
+        log.debug("End game : more than four malus.");
+        isFourthMalus = true;
     }
 }

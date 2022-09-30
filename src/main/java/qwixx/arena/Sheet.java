@@ -1,5 +1,6 @@
 package qwixx.arena;
 
+import lombok.extern.slf4j.Slf4j;
 import qwixx.execption.IllegalMoveException;
 
 import java.util.HashMap;
@@ -7,11 +8,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+@Slf4j
 public class Sheet {
 
     Map<Color, Line> lines;
     Set<Line> closeLines;
     final Arena arena;
+    int nbMalus = 0;
 
     public Sheet(Arena arena) {
         this.arena = arena;
@@ -23,11 +26,23 @@ public class Sheet {
         closeLines = new HashSet<>();
     }
 
-    public void accept(Dices dices) throws IllegalMoveException {
-        dices.update(this);
+    public void accept(Dices dices) {
+        try {
+            dices.update(this);
+        } catch (IllegalMoveException e) {
+            log.debug("Increase malus due to {}", e.getMessage());
+            malus();
+        }
     }
 
-    public void update(Color color, int value) throws IllegalMoveException{
+    private  void malus() {
+        nbMalus++;
+        if (nbMalus >= 4) {
+            arena.fourthMalus();
+        }
+    }
+
+    public void update(Color color, int value) throws IllegalMoveException {
         lines.get(color).update(value);
     }
 
@@ -36,7 +51,7 @@ public class Sheet {
         for (Line line : lines.values()) {
             score += line.score();
         }
-        return score;
+        return score - 5* nbMalus;
     }
 
     public void close(Line line) {
@@ -52,6 +67,7 @@ public class Sheet {
     public String toString() {
         return "Sheet{" +
                 "lines=" + lines +
+                ", malus=" + nbMalus +
                 '}';
     }
 }

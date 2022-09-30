@@ -30,7 +30,7 @@ public class Player {
     }
 
     public int score() {
-        return sheet.score();
+        return sheet.score() ;
     }
 
     public void show(AllDices allDices) {
