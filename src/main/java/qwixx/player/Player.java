@@ -9,8 +9,6 @@ import qwixx.execption.IllegalMoveException;
 import qwixx.ia.ML;
 import qwixx.util.Random;
 
-import java.util.Set;
-
 @Slf4j
 public class Player {
 
@@ -18,6 +16,7 @@ public class Player {
     final ML ml;
     final String id;
     Player leftPlayer;
+    boolean isCurrentPlayer = false;
 
 
     public Player(String id, Arena arena) {
@@ -36,14 +35,28 @@ public class Player {
         return sheet.score();
     }
 
-    public void show(Set<Dices> combinedDices) {
-        for (Dices dices : ml.bestDices(sheet, combinedDices)) {
+    public void show(AllDices combinedDices) {
+        boolean mustPlay = true;
+        for (Dices dices : ml.bestDices(sheet, combinedDices.combinePublic())) {
             try {
                 accept(dices);
+                mustPlay = false;
             } catch (IllegalMoveException e) {
-                ml.illegalMove(sheet, dices);
+               // empty
             }
-
+        }
+        if (isCurrentPlayer) {
+            log.info("{} is the current player (must play : {}) : {} ", id, mustPlay, sheet);
+            for (Dices dices : ml.bestDices(sheet, combinedDices.combine())) {
+                try {
+                    accept(dices);
+                } catch (IllegalMoveException e) {
+                    if (mustPlay) {
+                        log.debug("Increase malus due to: '{}'", e.getMessage());
+                        sheet.malus();
+                    }
+                }
+            }
         }
     }
 
@@ -57,5 +70,13 @@ public class Player {
 
     public void leftPlayer(Player currentPlayer) {
         this.leftPlayer = currentPlayer;
+    }
+
+    public void becomeFirstPlayer() {
+        isCurrentPlayer = true;
+    }
+
+    public void becomeLastPlayer() {
+        isCurrentPlayer = false;
     }
 }

@@ -24,9 +24,9 @@ public class Arena {
         log.info("dices : {}", dices);
 
         for (Player player : players) {
-            player.show(dices.combinePublic());
+            player.show(dices);
         }
-        currentPlayer.show(dices.combine());
+
 
         if (closeLines.size() > +2) {
             for (Player player : players) {
@@ -52,9 +52,12 @@ public class Arena {
             currentPlayer = player;
         }
         currentPlayer.leftPlayer(players.get(0));
+        currentPlayer.becomeFirstPlayer();
         while (continueToPlay()) {
             round(currentPlayer);
+            currentPlayer.becomeLastPlayer();
             currentPlayer = currentPlayer.leftPlayer();
+            currentPlayer.becomeFirstPlayer();
         }
         for (Player player : players) {
             log.info("Final score {}", player.score());

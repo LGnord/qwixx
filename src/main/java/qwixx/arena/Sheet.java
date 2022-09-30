@@ -26,16 +26,11 @@ public class Sheet {
         closeLines = new HashSet<>();
     }
 
-    public void accept(Dices dices) {
-        try {
-            dices.update(this);
-        } catch (IllegalMoveException e) {
-            log.debug("Increase malus due to: '{}'", e.getMessage());
-            malus();
-        }
+    public void accept(Dices dices) throws IllegalMoveException {
+        dices.update(this);
     }
 
-    private  void malus() {
+    public void malus() {
         nbMalus++;
         if (nbMalus >= 4) {
             arena.fourthMalus();
