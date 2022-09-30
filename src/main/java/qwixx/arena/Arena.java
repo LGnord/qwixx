@@ -20,6 +20,11 @@ public class Arena {
         for (Player player : players) {
             player.show(dices);
         }
+        if (closeLines.size() >+ 2) {
+            for (Player player : players) {
+                player.endGame();
+            }
+        }
     }
 
     public void closeLine(Color color) {
