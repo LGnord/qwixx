@@ -3,8 +3,8 @@ package qwixx.arena;
 import qwixx.execption.IllegalMoveException;
 
 class DecreaseLine  extends Line {
-    DecreaseLine() {
-        super(13);
+    DecreaseLine(Sheet sheet) {
+        super(sheet, 13);
     }
 
     @Override
@@ -12,7 +12,7 @@ class DecreaseLine  extends Line {
         if (value >= lastValue) {
             throw new IllegalMoveException("Increasing value " + value+ ">=" + lastValue);
         }
-        if (value == 2 && nbValues <=5) {
+        if (value == 2 && nbValues <=4) {
             throw new IllegalMoveException("Need more than 5 values to close a line. Current is" + nbValues);
         }
     }
@@ -22,6 +22,7 @@ class DecreaseLine  extends Line {
         if (value == 2) {
             isClose = true;
             nbValues++;
+            sheet.close(this);
         }
     }
 }

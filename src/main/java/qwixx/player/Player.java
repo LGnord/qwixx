@@ -1,6 +1,7 @@
 package qwixx.player;
 
 import qwixx.arena.AllDices;
+import qwixx.arena.Arena;
 import qwixx.arena.Dices;
 import qwixx.arena.Sheet;
 import qwixx.execption.IllegalMoveException;
@@ -11,10 +12,11 @@ import java.util.Map;
 
 public class Player {
 
-    private Sheet sheet = new Sheet();
-    private final Map<Dices, Double> score;
+    final Sheet sheet ;
+    final Map<Dices, Double> score;
 
-    public Player() {
+    public Player(Arena arena) {
+        this.sheet = new Sheet(arena);
         this.score = new HashMap<>();
         for (Dices dices : Dices.allCombination()) {
             score.put(dices, 1d);

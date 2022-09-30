@@ -8,8 +8,11 @@ public abstract class Line {
 
     boolean isClose = false ;
 
+    final Sheet sheet;
 
-    Line(int firstValue) {
+
+    Line(Sheet sheet, int firstValue) {
+        this.sheet = sheet;
         this.lastValue = firstValue;
     }
 
@@ -23,6 +26,7 @@ public abstract class Line {
         check(value);
         lastValue = value;
         nbValues++;
+        close(value);
     }
 
      int score() {

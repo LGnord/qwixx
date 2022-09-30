@@ -3,18 +3,24 @@ package qwixx.arena;
 import qwixx.execption.IllegalMoveException;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Sheet {
 
     Map<Color, Line> lines;
+    Set<Line> closeLines;
+    final Arena arena;
 
-    public Sheet() {
+    public Sheet(Arena arena) {
+        this.arena = arena;
         lines = new HashMap<>();
-        lines.put(Color.YELLOW, new IncreaseLine());
-        lines.put(Color.RED, new IncreaseLine());
-        lines.put(Color.BLUE, new DecreaseLine());
-        lines.put(Color.GREEN, new DecreaseLine());
+        lines.put(Color.YELLOW, new IncreaseLine(this));
+        lines.put(Color.RED, new IncreaseLine(this));
+        lines.put(Color.BLUE, new DecreaseLine(this));
+        lines.put(Color.GREEN, new DecreaseLine(this));
+        closeLines = new HashSet<>();
     }
 
     public void accept(Dices dices) throws IllegalMoveException {
@@ -31,5 +37,15 @@ public class Sheet {
             score += line.score();
         }
         return score;
+    }
+
+    public void close(Line line) {
+        closeLines.add(line);
+        for (Color color : lines.keySet()) {
+            if (line == lines.get(color)) {
+                arena.closeLine(color);
+            }
+        }
+
     }
 }
