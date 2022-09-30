@@ -1,13 +1,18 @@
 package qwixx.arena;
 
 
+import qwixx.util.Random;
+
 import java.util.List;
+
 
 abstract class Dice {
     int value;
 
+    Random random = new Random();
+
     public void rool() {
-        value = (int) Math.ceil(Math.random() * 6);
+        value = random.integerRandom(6);
     }
 
 

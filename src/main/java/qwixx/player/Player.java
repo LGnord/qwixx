@@ -7,9 +7,7 @@ import qwixx.arena.Sheet;
 import qwixx.execption.IllegalMoveException;
 import qwixx.execption.NoValidMoveException;
 import qwixx.ia.ML;
-
-import java.util.HashMap;
-import java.util.Map;
+import qwixx.util.Random;
 
 public class Player {
 
@@ -19,9 +17,7 @@ public class Player {
 
     public Player(Arena arena) {
         this.sheet = new Sheet(arena);
-        this.ml = new ML();
-
-
+        this.ml = new ML(new Random());
     }
 
     public void accept(Dices dices) throws IllegalMoveException {

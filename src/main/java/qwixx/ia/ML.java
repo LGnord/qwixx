@@ -3,39 +3,41 @@ package qwixx.ia;
 import qwixx.arena.AllDices;
 import qwixx.arena.Dices;
 import qwixx.arena.Sheet;
-import qwixx.execption.IllegalMoveException;
 import qwixx.execption.NoValidMoveException;
+import qwixx.util.Random;
 
 import java.util.*;
+
 
 public class ML {
 
     final Map<Sheet, Map<Dices, Double>> states;
+    final Random random;
 
-    public ML() {
+    public ML(Random random) {
+        this.random = random;
         this.states = new HashMap<>();
     }
 
-    public Collection<Dices> bestDices(Sheet sheet, AllDices allDices) throws NoValidMoveException {
-        List<Dices> best = new ArrayList<>();
+    public Collection<Dices> bestDices(Sheet sheet, AllDices allDices) {
+        List<Dices> bestList = new ArrayList<>();
         Map<Dices, Double> score = states.getOrDefault(sheet, emptyScore());
         states.put(sheet, score);
-        double sum = 0;
-        for (Dices dices : allDices.combine()) {
-            sum += score.get(dices);
+        List<Dices> combine = new ArrayList<>(allDices.combine());
+        double[] intervals = new double[combine.size() + 1];
+        intervals[0] = 0d;
+        for (int i = 0; i < combine.size(); i++) {
+            intervals[i + 1] = intervals[i] + score.get(combine.get(i));
         }
-        if (sum == 0) {
-            throw new NoValidMoveException();
-        }
-        double random = Math.random() * sum ;
-        sum = 0;
-        for (Dices dices : allDices.combine()) {
-            sum += score.get(dices);
-            if (sum > random) {
-                return best;
+
+        double random = this.random.doubleRandom(intervals[intervals.length - 1]);
+
+        for (int i = 0; i < combine.size(); i++) {
+            if (intervals[i] <= random && random <= intervals[i + 1]) {
+                bestList.add(combine.get(i));
             }
         }
-        return best;
+        return bestList;
     }
 
     private Map<Dices, Double> emptyScore() {
