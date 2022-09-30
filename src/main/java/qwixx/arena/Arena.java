@@ -1,7 +1,6 @@
 package qwixx.arena;
 
 import lombok.extern.slf4j.Slf4j;
-import qwixx.execption.NoValidMoveException;
 import qwixx.player.Player;
 
 import java.util.ArrayList;
@@ -19,15 +18,17 @@ public class Arena {
     Set<Color> closeLines = new HashSet<>();
     boolean isFourthMalus = false;
 
-    void round() {
+    void round(Player currentPlayer) {
+        log.debug("--- New round ---");
         dices.rool();
         log.info("dices : {}", dices);
+
         for (Player player : players) {
-            if (continueToPlay()) {
-                player.show(dices);
-            }
+            player.show(dices.combinePublic());
         }
-        if (closeLines.size() >+ 2) {
+        currentPlayer.show(dices.combine());
+
+        if (closeLines.size() > +2) {
             for (Player player : players) {
                 player.endGame();
             }
@@ -45,17 +46,25 @@ public class Arena {
     }
 
     public void playQwixx() {
+        Player currentPlayer = players.get(0);
+        for (Player player : players) {
+            player.leftPlayer(currentPlayer);
+            currentPlayer = player;
+        }
+        currentPlayer.leftPlayer(players.get(0));
         while (continueToPlay()) {
-            round();
+            round(currentPlayer);
+            currentPlayer = currentPlayer.leftPlayer();
         }
         for (Player player : players) {
-            log.info("Final score {}",  player.score());
+            log.info("Final score {}", player.score());
         }
     }
 
     boolean continueToPlay() {
-        return !isFourthMalus && closeLines.size() < 2 ;
+        return !isFourthMalus && closeLines.size() < 2;
     }
+
     public void fourthMalus() {
         log.debug("End game : more than four malus.");
         isFourthMalus = true;

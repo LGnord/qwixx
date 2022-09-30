@@ -9,12 +9,15 @@ import qwixx.execption.IllegalMoveException;
 import qwixx.ia.ML;
 import qwixx.util.Random;
 
+import java.util.Set;
+
 @Slf4j
 public class Player {
 
     final Sheet sheet;
     final ML ml;
     final String id;
+    Player leftPlayer;
 
 
     public Player(String id, Arena arena) {
@@ -30,11 +33,11 @@ public class Player {
     }
 
     public int score() {
-        return sheet.score() ;
+        return sheet.score();
     }
 
-    public void show(AllDices allDices) {
-        for (Dices dices : ml.bestDices(sheet, allDices)) {
+    public void show(Set<Dices> combinedDices) {
+        for (Dices dices : ml.bestDices(sheet, combinedDices)) {
             try {
                 accept(dices);
             } catch (IllegalMoveException e) {
@@ -45,6 +48,14 @@ public class Player {
     }
 
     public void endGame() {
+        // empty
+    }
 
+    public Player leftPlayer() {
+        return leftPlayer;
+    }
+
+    public void leftPlayer(Player currentPlayer) {
+        this.leftPlayer = currentPlayer;
     }
 }

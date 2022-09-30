@@ -19,11 +19,11 @@ public class ML {
         this.states = new HashMap<>();
     }
 
-    public Collection<Dices> bestDices(Sheet sheet, AllDices allDices) {
+    public Collection<Dices> bestDices(Sheet sheet, Set<Dices> combinedDices) {
         List<Dices> bestList = new ArrayList<>();
         Map<Dices, Double> score = states.getOrDefault(sheet, emptyScore());
         states.put(sheet, score);
-        List<Dices> combine = new ArrayList<>(allDices.combine());
+        List<Dices> combine = new ArrayList<>(combinedDices);
         double[] intervals = new double[combine.size() + 1];
         intervals[0] = 0d;
         for (int i = 0; i < combine.size(); i++) {

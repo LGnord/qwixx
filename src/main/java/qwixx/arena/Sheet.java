@@ -30,7 +30,7 @@ public class Sheet {
         try {
             dices.update(this);
         } catch (IllegalMoveException e) {
-            log.debug("Increase malus due to {}", e.getMessage());
+            log.debug("Increase malus due to: '{}'", e.getMessage());
             malus();
         }
     }

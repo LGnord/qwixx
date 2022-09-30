@@ -27,12 +27,19 @@ public class AllDices {
         return new HashSet<>(diceList);
     }
 
+    public Set<Dices> combinePublic() {
+        List<Dices> diceList = new ArrayList<>();
+        whiteDices[0].combine(whiteDices[1], diceList);
+        return new HashSet<>(diceList);
+    }
+
     @Override
     public String toString() {
         return "AllDices{" +
                 "whiteDices=" + Arrays.toString(whiteDices) +
                 ", coloredDices=" + Arrays.toString(coloredDices) +
                 ", combine=" + combine() +
+                ", public =" + combinePublic() +
                 '}';
     }
 }

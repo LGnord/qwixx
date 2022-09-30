@@ -29,7 +29,7 @@ public class MLTest {
         when(allDices.combine()).thenReturn(dices);
         ML ml = new ML(random);
 
-        Collection<Dices> actual = ml.bestDices(new Sheet(arena), allDices);
+        Collection<Dices> actual = ml.bestDices(new Sheet(arena), allDices.combine());
         assertEquals(1, actual.size());
         assertTrue(actual.containsAll(dices));
     }
@@ -46,7 +46,7 @@ public class MLTest {
         when(allDices.combine()).thenReturn(dices);
         ML ml = new ML(random);
 
-        Collection<Dices> actual = ml.bestDices(new Sheet(arena), allDices);
+        Collection<Dices> actual = ml.bestDices(new Sheet(arena), allDices.combine());
         assertTrue(actual.isEmpty());
     }
 
@@ -66,7 +66,7 @@ public class MLTest {
         when(allDices.combine()).thenReturn(dices);
         ML ml = new ML(random);
 
-        Collection<Dices> actual = ml.bestDices(new Sheet(arena), allDices);
+        Collection<Dices> actual = ml.bestDices(new Sheet(arena), allDices.combine());
         assertEquals(1, actual.size());
         assertTrue(actual.contains(expectedDices));
     }

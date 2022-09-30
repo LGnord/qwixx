@@ -13,7 +13,7 @@ class IncreaseLine extends Line {
             throw new IllegalMoveException("Impossible to decreasing value: " + value+ "<=" + lastValue);
         }
         if (value == 12 && nbValues <=4) {
-            throw new IllegalMoveException("Need more than 5 values to close a line. Current is" + nbValues);
+            throw new IllegalMoveException("Need more than 5 values to close a line. Current is " + nbValues);
         }
     }
 
