@@ -46,6 +46,12 @@ public class Sheet {
                 arena.closeLine(color);
             }
         }
+    }
 
+    @Override
+    public String toString() {
+        return "Sheet{" +
+                "lines=" + lines +
+                '}';
     }
 }

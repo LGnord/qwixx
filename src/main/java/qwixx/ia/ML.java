@@ -1,14 +1,14 @@
 package qwixx.ia;
 
+import lombok.extern.slf4j.Slf4j;
 import qwixx.arena.AllDices;
 import qwixx.arena.Dices;
 import qwixx.arena.Sheet;
-import qwixx.execption.NoValidMoveException;
 import qwixx.util.Random;
 
 import java.util.*;
 
-
+@Slf4j
 public class ML {
 
     final Map<Sheet, Map<Dices, Double>> states;
@@ -33,10 +33,11 @@ public class ML {
         double random = this.random.doubleRandom(intervals[intervals.length - 1]);
 
         for (int i = 0; i < combine.size(); i++) {
-            if (intervals[i] <= random && random <= intervals[i + 1]) {
+            if (intervals[i] <= random && random < intervals[i + 1]) {
                 bestList.add(combine.get(i));
             }
         }
+        log.debug("ML recommends to play {} because {} between {} in {}.", bestList, random, intervals, combine);
         return bestList;
     }
 

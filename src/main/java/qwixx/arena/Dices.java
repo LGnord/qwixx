@@ -46,7 +46,7 @@ public class Dices {
 
     @Override
     public String toString() {
-        return "Dices{" +
+        return "{" +
                 "color=" + color +
                 ", value=" + value +
                 '}';

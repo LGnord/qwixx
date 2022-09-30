@@ -1,9 +1,6 @@
 package qwixx.arena;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class AllDices {
 
@@ -28,5 +25,14 @@ public class AllDices {
             }
         }
         return new HashSet<>(diceList);
+    }
+
+    @Override
+    public String toString() {
+        return "AllDices{" +
+                "whiteDices=" + Arrays.toString(whiteDices) +
+                ", coloredDices=" + Arrays.toString(coloredDices) +
+                ", combine=" + combine() +
+                '}';
     }
 }

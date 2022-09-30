@@ -14,7 +14,7 @@ public class PlayerTest {
     @Test
     public void ensure_increase_score_when_player_accept_dices_same_color() throws IllegalMoveException {
         Arena arena = new Arena();
-        Player player = new Player(arena);
+        Player player = new Player("2", arena);
 
         assertEquals(0, player.score());
         Dices dices = new Dices(Color.RED, 2);
@@ -33,7 +33,7 @@ public class PlayerTest {
     @Test
     public void ensure_increase_score_when_player_accept_dices_different_color() throws IllegalMoveException {
         Arena arena = new Arena();
-        Player player = new Player(arena);
+        Player player = new Player("2", arena);
 
         assertEquals(0, player.score());
         Dices dices = new Dices(Color.RED, 2);
@@ -52,7 +52,7 @@ public class PlayerTest {
     @Test
     public void ensure_fail_decrease_dices() throws IllegalMoveException {
         Arena arena = new Arena();
-        Player player = new Player(arena);
+        Player player = new Player("2", arena);
 
         assertEquals(0, player.score());
         Dices dices = new Dices(Color.RED, 3);
@@ -64,7 +64,7 @@ public class PlayerTest {
     @Test
     public void ensure_fail_close_without_5_values() throws IllegalMoveException {
         Arena arena = new Arena();
-        Player player = new Player(arena);
+        Player player = new Player("2", arena);
 
         assertEquals(0, player.score());
         Dices dices = new Dices(Color.RED, 3);
@@ -76,7 +76,7 @@ public class PlayerTest {
     @Test
     public void ensure_close_increase_line() throws IllegalMoveException {
         Arena arena = new Arena();
-        Player player = new Player(arena);
+        Player player = new Player("2", arena);
 
         {
             Dices dices = new Dices(Color.GREEN, 12);
@@ -108,7 +108,7 @@ public class PlayerTest {
     @Test
     public void ensure_close_decrease_line() throws IllegalMoveException {
         Arena arena = new Arena();
-        Player player = new Player(arena);
+        Player player = new Player("2", arena);
 
         {
             Dices dices = new Dices(Color.RED, 3);

@@ -37,4 +37,12 @@ public abstract class Line {
 
     abstract void close(int value) throws IllegalMoveException;
 
+    @Override
+    public String toString() {
+        return "Line{" +
+                "isClose=" + isClose +
+                ", nbValues=" + nbValues +
+                ", lastValue=" + lastValue +
+                '}';
+    }
 }

@@ -8,6 +8,6 @@ public class Random {
     }
 
     public double doubleRandom(double maxValue) {
-        return Math.ceil(Math.random() * maxValue);
+        return Math.random() * maxValue;
     }
 }

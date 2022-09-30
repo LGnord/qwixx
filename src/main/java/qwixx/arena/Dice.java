@@ -35,6 +35,8 @@ abstract class Dice {
     protected void combineBlue(BlueDice blueDice, List<Dices> diceList) {
         // empty
     }
+
+
 }
 
 class WhiteDice extends Dice {
@@ -70,6 +72,11 @@ class WhiteDice extends Dice {
     protected void combineGreen(GreenDice greenDice, List<Dices> diceList) {
         diceList.add(new Dices(Color.BLUE, value + greenDice.value));
     }
+
+    @Override
+    public String toString() {
+        return "W" + value;
+    }
 }
 
 class RedDice extends Dice {
@@ -83,6 +90,11 @@ class RedDice extends Dice {
     protected void combineWhite(WhiteDice whiteDice, List<Dices> diceList) {
         diceList.add(new Dices(Color.RED, value + whiteDice.value));
     }
+    @Override
+    public String toString() {
+        return "R" + value;
+    }
+
 
 }
 
@@ -98,7 +110,10 @@ class YellowDice extends Dice {
         diceList.add(new Dices(Color.YELLOW, value + whiteDice.value));
     }
 
-
+    @Override
+    public String toString() {
+        return "Y" + value;
+    }
 
 }
 
@@ -114,7 +129,10 @@ class BlueDice extends Dice {
         diceList.add(new Dices(Color.BLUE, value + whiteDice.value));
     }
 
-
+    @Override
+    public String toString() {
+        return "B" + value;
+    }
 
 }
 
@@ -130,5 +148,9 @@ class GreenDice extends Dice {
         diceList.add(new Dices(Color.GREEN, value + whiteDice.value));
     }
 
+    @Override
+    public String toString() {
+        return "G" + value;
+    }
 
 }
