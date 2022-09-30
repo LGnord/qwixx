@@ -4,6 +4,7 @@ import qwixx.arena.AllDices;
 import qwixx.arena.Dices;
 import qwixx.arena.Sheet;
 import qwixx.execption.IllegalMoveException;
+import qwixx.execption.NoValidMoveException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,17 +29,25 @@ public class Player {
         return sheet.score();
     }
 
-    public void show(AllDices allDices) throws IllegalMoveException {
+    public void show(AllDices allDices) throws NoValidMoveException {
         double sum = 0;
         for (Dices dices : allDices.combine()) {
             sum += score.get(dices);
+        }
+        if (sum == 0) {
+            throw new NoValidMoveException();
         }
         double random = Math.random() * sum ;
         sum = 0;
         for (Dices dices : allDices.combine()) {
             sum += score.get(dices);
             if (sum > random) {
-                accept(dices);
+                try {
+                    accept(dices);
+                } catch (IllegalMoveException e) {
+                    score.put(dices, 0d);
+                    show(allDices);
+                }
                 return;
             }
         }
