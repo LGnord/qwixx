@@ -6,30 +6,36 @@ public abstract class Line {
 
     int[] SCORE = {0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78};
 
-    boolean isClose = false ;
-
+    boolean isClose = false;
     final Sheet sheet;
-
-
-    Line(Sheet sheet, int firstValue) {
-        this.sheet = sheet;
-        this.lastValue = firstValue;
-    }
-
     int nbValues = 0;
     int lastValue;
+    final Color color;
 
-     void update(int value) throws IllegalMoveException {
-         if (isClose) {
-             throw new IllegalMoveException("Line is close");
-         }
+    Line(Sheet sheet, int firstValue, Color color) {
+        this.sheet = sheet;
+        this.lastValue = firstValue;
+        this.color = color;
+    }
+
+    Line(Sheet sheet, int firstValue, Color color, boolean isClose, int nbValues) {
+        this(sheet, firstValue, color);
+        this.isClose = isClose;
+        this.nbValues = nbValues;
+    }
+
+
+    void update(int value) throws IllegalMoveException {
+        if (isClose) {
+            throw new IllegalMoveException("Line is close");
+        }
         check(value);
         lastValue = value;
         nbValues++;
         close(value);
     }
 
-     int score() {
+    int score() {
         return SCORE[nbValues];
     }
 
@@ -45,4 +51,6 @@ public abstract class Line {
                 ", lastValue=" + lastValue +
                 '}';
     }
+
+    public abstract Line newLine();
 }

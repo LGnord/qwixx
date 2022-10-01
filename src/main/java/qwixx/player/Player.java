@@ -9,10 +9,12 @@ import qwixx.execption.IllegalMoveException;
 import qwixx.ia.ML;
 import qwixx.util.Random;
 
+import java.util.Collection;
+
 @Slf4j
 public class Player {
 
-    final Sheet sheet;
+    Sheet sheet;
     final ML ml;
     final String id;
     Player leftPlayer;
@@ -26,9 +28,9 @@ public class Player {
         arena.register(this);
     }
 
-    public void accept(Dices dices) throws IllegalMoveException {
+    public void accept(Dices dices)  {
         log.debug("{}: plays {}. Sheet: {}", id, dices, sheet);
-        sheet.accept(dices);
+        sheet = sheet.accept(dices);
     }
 
     public int score() {
@@ -36,32 +38,26 @@ public class Player {
     }
 
     public void show(AllDices combinedDices) {
-        boolean mustPlay = true;
-        for (Dices dices : ml.bestDices(sheet, combinedDices.combinePublic())) {
-            try {
-                accept(dices);
-                mustPlay = false;
-            } catch (IllegalMoveException e) {
-               // empty
-            }
+        Collection<Dices> publicDices = ml.bestDices(sheet, combinedDices.combinePublic());
+        boolean mustPlay = publicDices.isEmpty();
+        for (Dices dices : publicDices) {
+            accept(dices);
         }
         if (isCurrentPlayer) {
             log.info("{} is the current player (must play : {}) : {} ", id, mustPlay, sheet);
-            for (Dices dices : ml.bestDices(sheet, combinedDices.combine())) {
-                try {
-                    accept(dices);
-                } catch (IllegalMoveException e) {
-                    if (mustPlay) {
-                        log.debug("Increase malus due to: '{}'", e.getMessage());
-                        sheet.malus();
-                    }
-                }
+            Collection<Dices> privateDices = ml.bestDices(sheet, combinedDices.combine());
+            for (Dices dices : privateDices) {
+                accept(dices);
+            }
+            if (mustPlay && privateDices.isEmpty()) {
+                log.debug("Increase malus because ML recommands to not play");
+                sheet = sheet.malus();
             }
         }
     }
 
-    public void endGame() {
-        // empty
+    public void endGame(int rank) {
+        log.info("{} is ranked {} with a score {}.", id, rank, score());
     }
 
     public Player leftPlayer() {

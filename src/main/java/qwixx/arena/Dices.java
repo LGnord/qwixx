@@ -17,8 +17,8 @@ public class Dices {
         this.value = value;
     }
 
-    public void update(Sheet sheet) throws IllegalMoveException {
-        sheet.update(color,  value);
+    public Sheet update(Sheet sheet)  {
+        return  sheet.update(color,  value);
     }
 
     public static Set<Dices> allCombination () {

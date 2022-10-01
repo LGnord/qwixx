@@ -3,10 +3,8 @@ package qwixx.arena;
 import lombok.extern.slf4j.Slf4j;
 import qwixx.player.Player;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -27,12 +25,6 @@ public class Arena {
             player.show(dices);
         }
 
-
-        if (closeLines.size() > +2) {
-            for (Player player : players) {
-                player.endGame();
-            }
-        }
     }
 
     public void closeLine(Color color) {
@@ -59,8 +51,17 @@ public class Arena {
             currentPlayer = currentPlayer.leftPlayer();
             currentPlayer.becomeFirstPlayer();
         }
+        Map<Integer, List<Player>> scores = new HashMap<>();
         for (Player player : players) {
-            log.info("Final score {}", player.score());
+            List<Player> p = scores.getOrDefault(player.score(), new ArrayList<>());
+            p.add(player);
+            scores.put(player.score(), p);
+        }
+        List<Integer> ranking = scores.keySet().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+        for (int rank = 0; rank < ranking.size(); rank++) {
+            for (Player player : scores.get(ranking.get(rank))) {
+                player.endGame(rank + 1);
+            }
         }
     }
 
