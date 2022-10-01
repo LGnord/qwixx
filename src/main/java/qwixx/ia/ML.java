@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import qwixx.arena.Dices;
 import qwixx.arena.Sheet;
 import qwixx.execption.IllegalMoveException;
+import qwixx.player.Player;
 import qwixx.util.Random;
 
 import java.util.*;
@@ -14,7 +15,16 @@ public class ML {
     final Map<Sheet, Map<Dices, Double>> states;
     final Random random;
 
-    public ML(Random random) {
+    static ML INSTANCE;
+
+    public static ML getInstance(Random random) {
+        if (INSTANCE == null) {
+            INSTANCE = new ML(random);
+        }
+        return INSTANCE;
+    }
+
+    ML(Random random) {
         this.random = random;
         this.states = new HashMap<>();
     }
@@ -48,11 +58,63 @@ public class ML {
                 sheet.check(dices);
                 map.put(dices, 1d);
             } catch (IllegalMoveException e) {
-              // empty
+                // empty
             }
         }
         return map;
     }
 
+    Map<Player, List<State>> history;
 
+    public void learn(Player p, Sheet sheet, Dices played) {
+        List<State> stateList = history.getOrDefault(p, new ArrayList<>());
+        stateList.add(new State(sheet, played.copy()));
+        history.put(p, stateList);
+    }
+
+    public void newGame() {
+        history = new HashMap<>();
+    }
+
+    public void win(Player player) {
+        reward(1, history.get(player));
+    }
+
+    public void lost(Player player) {
+        reward(-1, history.get(player));
+    }
+
+    static double REWARD_RATE = 0.9;
+
+    private void reward(int coeff,  List<State> stateList) {
+        log.debug("Reward {}, {}", coeff, stateList);
+        double reward = coeff;
+        for (int i = stateList.size() - 1; i >= 0; i--) {
+            State state = stateList.get(i);
+            Map<Dices, Double> proba = states.get(state.sheet);
+            proba.put(state.played, proba.get(state.played) + reward);
+            reward = reward * REWARD_RATE;
+        }
+        log.debug("{}", states);
+    }
+
+
+}
+
+class State {
+    final Sheet sheet;
+    final Dices played;
+
+    State(Sheet sheet, Dices played) {
+        this.sheet = sheet;
+        this.played = played;
+    }
+
+    @Override
+    public String toString() {
+        return "*State{" +
+                "sheet=" + sheet +
+                ", played=" + played +
+                "}*";
+    }
 }

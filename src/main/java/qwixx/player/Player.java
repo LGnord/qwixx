@@ -23,18 +23,23 @@ public class Player {
 
     public Player(String id, Arena arena) {
         this.sheet = new Sheet(arena);
-        this.ml = new ML(new Random());
+        this.ml = ML.getInstance(new Random());
         this.id = id;
         arena.register(this);
     }
 
     public void accept(Dices dices)  {
-        log.debug("{}: plays {}. Sheet: {}", id, dices, sheet);
+        log.debug("{} plays {}. Sheet: {}", id, dices, sheet);
+        ml.learn(this, sheet, dices);
         sheet = sheet.accept(dices);
     }
 
     public int score() {
         return sheet.score();
+    }
+
+    public void newGame() {
+        ml.newGame();
     }
 
     public void show(AllDices combinedDices) {
@@ -58,6 +63,11 @@ public class Player {
 
     public void endGame(int rank) {
         log.info("{} is ranked {} with a score {}.", id, rank, score());
+        if (rank == 1) {
+            ml.win(this);
+        } else {
+            ml.lost(this);
+        }
     }
 
     public Player leftPlayer() {

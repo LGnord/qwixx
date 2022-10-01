@@ -51,4 +51,8 @@ public class Dices {
                 ", value=" + value +
                 '}';
     }
+
+    public Dices copy() {
+        return new Dices(color, value);
+    }
 }

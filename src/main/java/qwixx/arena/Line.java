@@ -45,11 +45,7 @@ public abstract class Line {
 
     @Override
     public String toString() {
-        return "Line{" +
-                "isClose=" + isClose +
-                ", nbValues=" + nbValues +
-                ", lastValue=" + lastValue +
-                '}';
+        return "{"+nbValues+","+lastValue+","+(isClose?'t':'f')+"}";
     }
 
     public abstract Line newLine();

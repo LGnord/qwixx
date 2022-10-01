@@ -16,15 +16,16 @@ public class Arena {
     Set<Color> closeLines = new HashSet<>();
     boolean isFourthMalus = false;
 
+    int roundId = 1;
     void round(Player currentPlayer) {
-        log.debug("--- New round ---");
+        log.debug("--- Round {} ---", roundId);
         dices.rool();
         log.info("dices : {}", dices);
 
         for (Player player : players) {
             player.show(dices);
         }
-
+        roundId++;
     }
 
     public void closeLine(Color color) {
@@ -38,12 +39,13 @@ public class Arena {
     }
 
     public void playQwixx() {
-        Player currentPlayer = players.get(0);
-        for (Player player : players) {
-            player.leftPlayer(currentPlayer);
-            currentPlayer = player;
+        for (int i = 0; i < players.size() - 1; i++) {
+            players.get(i).leftPlayer(players.get(i + 1));
+            players.get(i).newGame();
         }
-        currentPlayer.leftPlayer(players.get(0));
+        players.get(players.size() - 1).leftPlayer(players.get(0));
+
+        Player currentPlayer = players.get(0);
         currentPlayer.becomeFirstPlayer();
         while (continueToPlay()) {
             round(currentPlayer);
